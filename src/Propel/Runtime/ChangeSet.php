@@ -33,7 +33,7 @@ class ChangeSet {
 //        return $this->commitId;
 //    }
 
-    public function scheduleInsert($entity)
+    public function scheduleInsert($entity): void
     {
         $id = spl_object_hash($entity);
 
@@ -42,7 +42,7 @@ class ChangeSet {
         unset($this->deletions[$id]);
     }
 
-    public function scheduleUpdate($entity)
+    public function scheduleUpdate($entity): void
     {
         $id = spl_object_hash($entity);
 
@@ -51,7 +51,7 @@ class ChangeSet {
         unset($this->deletions[$id]);
     }
 
-    public function scheduleDelete($entity)
+    public function scheduleDelete($entity): void
     {
         $id = spl_object_hash($entity);
 
@@ -63,7 +63,7 @@ class ChangeSet {
     /**
      * @return array
      */
-    public function getInserts()
+    public function getInserts(): array
     {
         return $this->inserts;
     }
@@ -71,7 +71,7 @@ class ChangeSet {
     /**
      * @return array
      */
-    public function getUpdates()
+    public function getUpdates(): array
     {
         return $this->updates;
     }
@@ -79,9 +79,8 @@ class ChangeSet {
     /**
      * @return array
      */
-    public function getDeletions()
+    public function getDeletions(): array
     {
         return $this->deletions;
     }
-
 }

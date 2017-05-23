@@ -239,7 +239,7 @@ class Configuration extends GeneratorConfig
     /**
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher()
+    public function getEventDispatcher(): EventDispatcherInterface
     {
         if (null === $this->eventDispatcher) {
             $this->eventDispatcher = new EventDispatcher();
@@ -251,7 +251,7 @@ class Configuration extends GeneratorConfig
     /**
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function setEventDispatcher($eventDispatcher)
+    public function setEventDispatcher($eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -262,7 +262,7 @@ class Configuration extends GeneratorConfig
      *
      * @param string $generatorVersion
      */
-    public function checkVersion($generatorVersion)
+    public function checkVersion($generatorVersion): void
     {
         if ($generatorVersion != Propel::VERSION) {
             $warning = "Version mismatch: The generated configuration was build using propel '" . $generatorVersion;
@@ -283,7 +283,7 @@ class Configuration extends GeneratorConfig
      *
      * @return Configuration
      */
-    public static function getCurrentConfiguration()
+    public static function getCurrentConfiguration(): Configuration
     {
         if (!static::$globalConfiguration) {
             throw new RuntimeException(
@@ -297,7 +297,7 @@ class Configuration extends GeneratorConfig
     /**
      * @return Configuration
      */
-    public static function getCurrentConfigurationOrCreate()
+    public static function getCurrentConfigurationOrCreate(): Configuration
     {
         if (!static::$globalConfiguration) {
             static::$globalConfiguration = new static;
@@ -311,7 +311,7 @@ class Configuration extends GeneratorConfig
      *
      * @param Configuration $configuration
      */
-    public static function registerConfiguration(Configuration $configuration)
+    public static function registerConfiguration(Configuration $configuration): void
     {
         static::$globalConfiguration = $configuration;
     }
@@ -319,7 +319,7 @@ class Configuration extends GeneratorConfig
     /**
      * @return string
      */
-    public function getDefaultDatasource()
+    public function getDefaultDatasource(): string
     {
         return $this->defaultDatasource;
     }
@@ -327,7 +327,7 @@ class Configuration extends GeneratorConfig
     /**
      * @param string $defaultDatasource
      */
-    public function setDefaultDatasource($defaultDatasource)
+    public function setDefaultDatasource($defaultDatasource): void
     {
         $this->defaultDatasource = $defaultDatasource;
     }
@@ -341,7 +341,7 @@ class Configuration extends GeneratorConfig
      * @param string          $databaseName
      * @param string|string[] $fullEntityClassName
      */
-    public function registerEntity($databaseName, $fullEntityClassName)
+    public function registerEntity($databaseName, $fullEntityClassName): void
     {
         foreach ((array)$fullEntityClassName as $fullEntityClassName) {
             $this->entityToDatabaseMap[$fullEntityClassName] = $databaseName;
@@ -359,7 +359,7 @@ class Configuration extends GeneratorConfig
      *
      * @return string[]
      */
-    public function getEntitiesForDatabase($databaseName)
+    public function getEntitiesForDatabase($databaseName): array
     {
         return $this->databaseToEntitiesMap[$databaseName];
     }
@@ -374,7 +374,7 @@ class Configuration extends GeneratorConfig
      *
      * @return EntityMap[]
      */
-    public function getEntityMapsForDatabase($databaseName)
+    public function getEntityMapsForDatabase($databaseName): array
     {
         $entities = [];
         if (!isset($this->databaseToEntitiesMap[$databaseName])) {
@@ -393,7 +393,7 @@ class Configuration extends GeneratorConfig
      *
      * @return DatabaseMap
      */
-    public function getDatabaseForEntityClass($fullEntityClassName)
+    public function getDatabaseForEntityClass($fullEntityClassName): DatabaseMap
     {
         $databaseName = $this->entityToDatabaseMap[$fullEntityClassName];
 
@@ -405,7 +405,7 @@ class Configuration extends GeneratorConfig
      *
      * @return DatabaseMap
      */
-    public function getDatabase($databaseName = 'default')
+    public function getDatabase($databaseName = 'default'): DatabaseMap
     {
         if (!isset($this->databaseMaps[$databaseName])) {
             $this->databaseMaps[$databaseName] = new DatabaseMap($databaseName);
@@ -421,7 +421,7 @@ class Configuration extends GeneratorConfig
     /**
      * @param DatabaseMap $database
      */
-    public function registerDatabase(DatabaseMap $database)
+    public function registerDatabase(DatabaseMap $database): void
     {
         $this->databaseMaps[$database->getName()] = $database;
     }
@@ -429,7 +429,7 @@ class Configuration extends GeneratorConfig
     /**
      * @return string[]
      */
-    public function getDatabaseNames()
+    public function getDatabaseNames(): array
     {
         return array_keys($this->databaseToEntitiesMap);
     }
@@ -449,7 +449,7 @@ class Configuration extends GeneratorConfig
      *
      * @return bool
      */
-    public function hasEntityMap($fullEntityClassName)
+    public function hasEntityMap($fullEntityClassName): bool
     {
         return isset($this->entityToDatabaseMap[$fullEntityClassName]) || isset($this->entityShortNameToDatabaseMap[$fullEntityClassName]);
     }
@@ -460,7 +460,7 @@ class Configuration extends GeneratorConfig
      *
      * @return null|EntityMap
      */
-    public function getEntityMap($fullEntityClassName, $returnNull = false)
+    public function getEntityMap($fullEntityClassName, $returnNull = false): ?EntityMap
     {
         $fullEntityClassName = trim($fullEntityClassName, '\\');
 
@@ -516,7 +516,7 @@ class Configuration extends GeneratorConfig
         return $map;
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->databaseMaps = [];
         $this->entityMaps = [];
@@ -528,7 +528,7 @@ class Configuration extends GeneratorConfig
      *
      * @return PersisterInterface
      */
-    public function getEntityPersisterForEntity(Session $session, $entity)
+    public function getEntityPersisterForEntity(Session $session, $entity): PersisterInterfaces
     {
         if ($entity instanceof EntityProxyInterface) {
             $entityName = get_parent_class($entity);
@@ -547,7 +547,7 @@ class Configuration extends GeneratorConfig
      *
      * @return PersisterInterface
      */
-    public function getEntityPersister(Session $session, $entityName)
+    public function getEntityPersister(Session $session, $entityName): PersisterInterface
     {
         $database = $this->getDatabaseForEntityClass($entityName);
 
@@ -565,7 +565,7 @@ class Configuration extends GeneratorConfig
      *
      * @return ModelCriteria
      */
-    public function createQuery($entityName, $alias = '')
+    public function createQuery($entityName, $alias = ''): ModelCriteria
     {
         return $this->getRepository($entityName)->createQuery($alias);
     }
@@ -575,7 +575,7 @@ class Configuration extends GeneratorConfig
      *
      * @return FieldTypeInterface
      */
-    public function getFieldType($type)
+    public function getFieldType($type): FieldTypeInterface
     {
         $type = strtolower($type);
 
@@ -599,7 +599,7 @@ class Configuration extends GeneratorConfig
      *
      * @return Repository
      */
-    public function getRepository($entityName)
+    public function getRepository($entityName): Repository
     {
         $entityMap = $this->getEntityMap($entityName);
         $class = $entityMap->getRepositoryClass();
@@ -616,7 +616,7 @@ class Configuration extends GeneratorConfig
      *
      * @return Repository
      */
-    public function getRepositoryForEntity($entity)
+    public function getRepositoryForEntity($entity): Repository
     {
         if ($entity instanceof EntityProxyInterface) {
             $entityName = get_parent_class($entity);
@@ -632,7 +632,7 @@ class Configuration extends GeneratorConfig
      *
      * @return EntityMap
      */
-    public function getEntityMapForEntity($entity)
+    public function getEntityMapForEntity($entity): EntityMap
     {
         if ($entity instanceof EntityProxyInterface) {
             $entityName = get_parent_class($entity);
@@ -646,7 +646,7 @@ class Configuration extends GeneratorConfig
     /**
      * @return SessionFactory
      */
-    public function getSessionFactory()
+    public function getSessionFactory(): SessionFactory
     {
         if (null === $this->sessionFactory) {
             $this->sessionFactory = new SessionFactory($this);
@@ -660,7 +660,7 @@ class Configuration extends GeneratorConfig
      *
      * @return Session
      */
-    public function getSession()
+    public function getSession(): Session
     {
         $sessionFactory = $this->getSessionFactory();
 
@@ -674,7 +674,7 @@ class Configuration extends GeneratorConfig
      *
      * @return Session
      */
-    public function createSession()
+    public function createSession(): Session
     {
         return $this->getSessionFactory()->build();
     }
@@ -685,7 +685,7 @@ class Configuration extends GeneratorConfig
      *
      * @return array
      */
-    protected function getRuntimeConnections()
+    protected function getRuntimeConnections(): array
     {
         if (null === $this->runtimeConnections) {
             $connectionNames = $this->get()['runtime']['connections'];
@@ -705,7 +705,7 @@ class Configuration extends GeneratorConfig
      *
      * @return ConnectionManagerInterface
      */
-    public function getConnectionManager($databaseName = 'default')
+    public function getConnectionManager($databaseName = 'default'): ConnectionManagerInterface
     {
         if (!isset($this->connectionManager[$databaseName])) {
             throw new InvalidArgumentException(
@@ -725,7 +725,7 @@ class Configuration extends GeneratorConfig
      *
      * @return bool
      */
-    public function hasConnectionManager($databaseName = 'default')
+    public function hasConnectionManager($databaseName = 'default'): bool
     {
         return isset($this->connectionManager[$databaseName]);
     }
@@ -734,7 +734,7 @@ class Configuration extends GeneratorConfig
      * @param string                     $databaseName
      * @param ConnectionManagerInterface $connectionManager
      */
-    public function setConnectionManager($databaseName, ConnectionManagerInterface $connectionManager)
+    public function setConnectionManager($databaseName, ConnectionManagerInterface $connectionManager): void
     {
         if ($connectionManager instanceof LoggerAwareInterface) {
             $connectionManager->setLogger($this->getLogger());
@@ -743,10 +743,10 @@ class Configuration extends GeneratorConfig
         $this->connectionManager[$databaseName] = $connectionManager;
     }
 
-    /*
+    /**
      * @return ConnectionManagerInterface
      */
-    public function buildConnectionManager($name, array $connection)
+    public function buildConnectionManager($name, array $connection): ConnectionManagerInterface
     {
         $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle($this->getAdapter($name));
         $manager->setName($name);
@@ -758,7 +758,7 @@ class Configuration extends GeneratorConfig
         return $manager;
     }
 
-    public function closeConnections()
+    public function closeConnections(): void
     {
         foreach ($this->connectionManager as $connectionManager) {
             $connectionManager->closeConnections();
@@ -776,7 +776,7 @@ class Configuration extends GeneratorConfig
      *
      * @throws AdapterException
      */
-    public function getAdapter($name)
+    public function getAdapter($name): AdapterInterface
     {
         if (!isset($this->adapters[$name])) {
             $this->adapters[$name] = AdapterFactory::create($this->databaseToAdapter[$name]);
@@ -790,7 +790,7 @@ class Configuration extends GeneratorConfig
      *
      * @return bool
      */
-    public function hasAdapter($name)
+    public function hasAdapter($name): bool
     {
         return isset($this->adapters[$name]);
     }
@@ -799,7 +799,7 @@ class Configuration extends GeneratorConfig
      * @param string           $name
      * @param AdapterInterface $adapter
      */
-    public function setAdapter($name, AdapterInterface $adapter)
+    public function setAdapter($name, AdapterInterface $adapter): void
     {
         $this->adapters[$name] = $adapter;
     }
@@ -808,13 +808,15 @@ class Configuration extends GeneratorConfig
      * @param string $databaseName
      * @param string $adapterClass
      */
-    public function setAdapterClass($databaseName, $adapterClass)
+    public function setAdapterClass($databaseName, $adapterClass): void
     {
         unset($this->adapters[$databaseName]);
         $this->databaseToAdapter[$databaseName] = $adapterClass;
     }
 
     /**
+     * @TODO add return type
+     *
      * Logs a message
      * If a logger has been configured, the logger will be used, otherwise the
      * logging message will be discarded without any further action
@@ -852,7 +854,7 @@ class Configuration extends GeneratorConfig
      * @param string $message
      * @param int|null $color LOG_* constants, like Configuration::LOG_BLUE
      */
-    public function debug($message, $color = null)
+    public function debug($message, $color = null): void
     {
         list($firstCaller, $secondCaller) = debug_backtrace();
         $class = $secondCaller['class'];
@@ -882,7 +884,7 @@ class Configuration extends GeneratorConfig
      * @param string $color
      * @return string
      */
-    public function colorizeMessage($message, $color)
+    public function colorizeMessage($message, $color): string
     {
         $ansi = new \Bramus\Ansi\Ansi(new \Bramus\Ansi\Writers\BufferWriter());
 
@@ -901,7 +903,7 @@ class Configuration extends GeneratorConfig
      *
      * @return LoggerInterface
      */
-    public function getLogger($name = 'defaultLogger')
+    public function getLogger($name = 'defaultLogger'): LoggerInterface
     {
         if (!isset($this->loggers[$name])) {
             $this->loggers[$name] = $this->buildLogger($name);
@@ -914,7 +916,7 @@ class Configuration extends GeneratorConfig
      * @param string          $name   the name of the logger to be set
      * @param LoggerInterface $logger A logger instance
      */
-    public function setLogger($name, LoggerInterface $logger)
+    public function setLogger($name, LoggerInterface $logger): void
     {
         $this->loggers[$name] = $logger;
     }
@@ -930,7 +932,7 @@ class Configuration extends GeneratorConfig
      * @return Logger|LoggerInterface|NullLogger
      * @throws UnexpectedValueException
      */
-    protected function buildLogger($name = 'defaultLogger')
+    protected function buildLogger($name = 'defaultLogger'): LoggerInterface
     {
         if ($this->isDebug()) {
             $logger = new Logger($name);
@@ -1007,7 +1009,7 @@ class Configuration extends GeneratorConfig
      * @param string $name
      * @param array  $loggerConfiguration
      */
-    public function setLoggerConfiguration($name, $loggerConfiguration)
+    public function setLoggerConfiguration($name, $loggerConfiguration): void
     {
         $this->loggerConfigurations[$name] = $loggerConfiguration;
     }
@@ -1020,7 +1022,7 @@ class Configuration extends GeneratorConfig
      *
      * @param string $profilerClass
      */
-    public function setProfilerClass($profilerClass)
+    public function setProfilerClass($profilerClass): void
     {
         $this->profilerClass = $profilerClass;
         $this->profiler = null;
@@ -1033,7 +1035,7 @@ class Configuration extends GeneratorConfig
      *
      * @param array $profilerConfiguration
      */
-    public function setProfilerConfiguration($profilerConfiguration)
+    public function setProfilerConfiguration($profilerConfiguration): void
     {
         $this->profilerConfiguration = $profilerConfiguration;
         $this->profiler = null;
@@ -1044,7 +1046,7 @@ class Configuration extends GeneratorConfig
      *
      * @param \Propel\Runtime\Util\Profiler $profiler
      */
-    public function setProfiler($profiler)
+    public function setProfiler($profiler): void
     {
         $this->profiler = $profiler;
     }
@@ -1056,7 +1058,7 @@ class Configuration extends GeneratorConfig
      *
      * @return \Propel\Runtime\Util\Profiler
      */
-    public function getProfiler()
+    public function getProfiler(): \Propel\Runtime\Util\Profiler
     {
         if (null === $this->profiler) {
             $class = $this->profilerClass;

@@ -2,7 +2,6 @@
 
 namespace Propel\Runtime;
 
-
 use Propel\Runtime\Map\EntityMap;
 
 trait ActiveRecordTrait
@@ -10,7 +9,7 @@ trait ActiveRecordTrait
     /**
      * @return bool
      */
-    public function isNew()
+    public function isNew(): bool
     {
         return Configuration::getCurrentConfiguration()->getSession()->isNew($this);
     }
@@ -18,17 +17,19 @@ trait ActiveRecordTrait
     /**
      * @return Repository\Repository
      */
-    public function getRepository()
+    public function getRepository(): Repository\Repository
     {
         return Configuration::getCurrentConfiguration()->getRepositoryForEntity($this);
     }
 
-    public function getPropelConfiguration()
+    public function getPropelConfiguration(): Configuration
     {
         return Configuration::getCurrentConfiguration();
     }
 
     /**
+     * @TODO add return type
+     *
      * @return mixed
      */
     public function save()
@@ -37,6 +38,8 @@ trait ActiveRecordTrait
     }
 
     /**
+     * @TODO add return type
+     *
      * @return mixed
      */
     public function reload()
@@ -45,6 +48,8 @@ trait ActiveRecordTrait
     }
 
     /**
+     * @TODO add return type
+     *
      * @return mixed
      */
     public function delete()
@@ -52,6 +57,9 @@ trait ActiveRecordTrait
         Configuration::getCurrentConfiguration()->getRepositoryForEntity($this)->remove($this);
     }
 
+    /**
+     * @TODO add return type
+     */
     public function getPrimaryKey()
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getPrimaryKey($this);
@@ -74,7 +82,8 @@ trait ActiveRecordTrait
      * EntityMap::TYPE_COLNAME, EntityMap::TYPE_FIELDNAME, EntityMap::TYPE_NUM.
      * Defaults to EntityMap::TYPE_FIELDNAME.
      */
-    public function fromArray(array $arr, $keyType = EntityMap::TYPE_FIELDNAME) {
+    public function fromArray(array $arr, $keyType = EntityMap::TYPE_FIELDNAME): object
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->fromArray($arr, $keyType, $this);
     }
 
@@ -88,7 +97,8 @@ trait ActiveRecordTrait
      * Defaults to EntityMap::TYPE_FIELDNAME.
      * @return $this
      */
-    public function getByName($name, $type = EntityMap::TYPE_FIELDNAME) {
+    public function getByName($name, $type = EntityMap::TYPE_FIELDNAME): object
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getByName($this, $name, $type);
     }
 
@@ -98,7 +108,8 @@ trait ActiveRecordTrait
      * @param integer $pos position in xml schema
      * @return $this
      */
-    public function getByPosition($pos) {
+    public function getByPosition($pos): object
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getByPosition($this, $pos);
     }
 
@@ -114,7 +125,8 @@ trait ActiveRecordTrait
      * Defaults to EntityMap::TYPE_FIELDNAME.
      * @return $this
      */
-    public function setByName($name, $value, $type = EntityMap::TYPE_FIELDNAME) {
+    public function setByName($name, $value, $type = EntityMap::TYPE_FIELDNAME): object
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->setByName($this, $name, $value, $type);
     }
 
@@ -125,7 +137,8 @@ trait ActiveRecordTrait
      * @param mixed $value field value
      * @return $this
      */
-    public function setByPosition($pos, $value) {
+    public function setByPosition($pos, $value): object
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->setByPosition($this, $pos, $value);
     }
 
@@ -145,7 +158,8 @@ trait ActiveRecordTrait
      *
      * @return array
      */
-    public function toArray($keyType = EntityMap::TYPE_FIELDNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false, $alreadyDumpedObjectsWatcher = null) {
+    public function toArray($keyType = EntityMap::TYPE_FIELDNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false, $alreadyDumpedObjectsWatcher = null): array
+    {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->toArray($this, $keyType, $includeLazyLoadColumns, $includeForeignObjects, $alreadyDumpedObjectsWatcher);
     }
 
@@ -154,7 +168,7 @@ trait ActiveRecordTrait
      *
      * @return array
      */
-    public function getVirtualFields()
+    public function getVirtualFields(): array
     {
         $reflection = new \ReflectionClass($this);
 
@@ -169,6 +183,8 @@ trait ActiveRecordTrait
     }
 
     /**
+     * // @TODO add return type
+     *
      * @param string $name
      *
      * @return mixed
@@ -188,7 +204,7 @@ trait ActiveRecordTrait
      *
      * @return $this
      */
-    public function setVirtualColumn($name, $value)
+    public function setVirtualColumn($name, $value): object
     {
         $this->$name = $value;
 
@@ -200,7 +216,7 @@ trait ActiveRecordTrait
      *
      * @return boolean
      */
-    public function hasVirtualField($name)
+    public function hasVirtualField($name): bool
     {
         $fields = $this->getVirtualFields();
         return array_key_exists($name, $fields);
