@@ -19,7 +19,7 @@ class PersisterException extends \Exception
      *
      * @return static
      */
-    public static function create(EntityMap $entityMap, $message = null, $previous = null, $code = 0)
+    public static function create(EntityMap $entityMap, $message = null, $previous = null, $code = 0): \Exception
     {
         $exception = new static($message, $code, $previous);
         $exception->entityMap = $entityMap;
@@ -30,7 +30,7 @@ class PersisterException extends \Exception
     /**
      * @return EntityMap
      */
-    public function getEntityMap()
+    public function getEntityMap(): EntityMap
     {
         return $this->entityMap;
     }

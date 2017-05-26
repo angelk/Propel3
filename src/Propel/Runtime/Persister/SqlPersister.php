@@ -63,7 +63,7 @@ class SqlPersister implements PersisterInterface
     /**
      * @return Configuration
      */
-    protected function getConfiguration()
+    protected function getConfiguration(): Configuration
     {
         return $this->getSession()->getConfiguration();
     }
@@ -71,7 +71,7 @@ class SqlPersister implements PersisterInterface
     /**
      * @return Session
      */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
@@ -79,10 +79,10 @@ class SqlPersister implements PersisterInterface
     /**
      * @param object[] $entities
      */
-    public function remove(EntityMap $entityMap, $entities)
+    public function remove(EntityMap $entityMap, $entities): int
     {
         if (!$entities) {
-            return false;
+            return 0;
         }
 
         $event = new DeleteEvent($this->getSession(), $entityMap, $entities);
@@ -110,13 +110,12 @@ class SqlPersister implements PersisterInterface
         } catch (\Exception $e) {
             throw new RuntimeException(sprintf('Could not execute query %s', $query), 0, $e);
         }
-
     }
 
     /**
      * @param object[] $entities
      */
-    public function commit(EntityMap $entityMap, $entities)
+    public function commit(EntityMap $entityMap, $entities): void
     {
         $event = new SaveEvent($this->getSession(), $entityMap, $entities);
         $this->getSession()->getConfiguration()->getEventDispatcher()->dispatch(Events::PRE_SAVE, $event);
@@ -133,9 +132,10 @@ class SqlPersister implements PersisterInterface
             }
         }
 
-        $this->getConfiguration()->debug(sprintf(
-            ' COMMIT PERSISTER with %d entities of %s', count($entities), $entityMap->getFullClassName()
-        ), Configuration::LOG_GREEN);
+        $this->getConfiguration()->debug(
+            sprintf(' COMMIT PERSISTER with %d entities of %s', count($entities), $entityMap->getFullClassName()),
+            Configuration::LOG_GREEN
+        );
 
         if (!$inserts && !$updates) {
             $this->getConfiguration()->debug(sprintf('   No changes detected'), Configuration::LOG_GREEN);
@@ -168,7 +168,7 @@ class SqlPersister implements PersisterInterface
     /**
      * @param ConnectionInterface $connection
      */
-    protected function prepareAutoIncrement(EntityMap $entityMap, ConnectionInterface $connection, $count)
+    protected function prepareAutoIncrement(EntityMap $entityMap, ConnectionInterface $connection, $count): void
     {
         $fieldNames = $entityMap->getAutoIncrementFieldNames();
         $object = [];
@@ -197,7 +197,7 @@ class SqlPersister implements PersisterInterface
      *
      * @throws PersisterException
      */
-    protected function doInsert(EntityMap $entityMap, array $inserts)
+    protected function doInsert(EntityMap $entityMap, array $inserts): void
     {
         if (!$inserts) {
             return;
@@ -311,7 +311,7 @@ class SqlPersister implements PersisterInterface
         }
     }
 
-    public function sessionCommitEnd()
+    public function sessionCommitEnd(): void
     {
         $this->insertedManyToManyRelation = [];
     }
@@ -323,7 +323,7 @@ class SqlPersister implements PersisterInterface
      * @param array $inserts
      * @param RelationMap $relation
      */
-    protected function addCrossRelations(EntityMap $entityMap, $inserts, RelationMap $relation)
+    protected function addCrossRelations(EntityMap $entityMap, $inserts, RelationMap $relation): void
     {
         //make sure the symmetrical relation hasn't been saved yet.
         //if so, we return immediately since we would save the cross entities twice.
@@ -335,7 +335,6 @@ class SqlPersister implements PersisterInterface
         $isset = $entityMap->getPropIsset();
 
         foreach ($inserts as $entity) {
-
             $id = substr(md5(spl_object_hash($entity)), 0, 9);
             $debugName = "{$entityMap->getFullClassName()} #$id {$relation->getName()}";
 
@@ -356,7 +355,6 @@ class SqlPersister implements PersisterInterface
             $query->delete();
 
             if (null !== $foreignItems && count($foreignItems)) {
-
                 $this->getConfiguration()->debug("many-to-many $debugName: update with " . count($foreignItems) . " foreign items.");
 
                 if ($relation->isImplementationDetail()) {
@@ -368,7 +366,6 @@ class SqlPersister implements PersisterInterface
                     $writer = $relation->getMiddleEntity()->getPropWriter();
 
                     foreach ($foreignItems as $foreignItem) {
-
                         $id = [spl_object_hash($entity)];
 
                         if ($relation->isPolymorphic()) {
@@ -401,11 +398,10 @@ class SqlPersister implements PersisterInterface
             } else {
                 $this->getConfiguration()->debug("many-to-many $debugName: no update, since no items.");
             }
-
         }
     }
 
-    protected function deleteAll(EntityMap $entityMap)
+    protected function deleteAll(EntityMap $entityMap): void
     {
         $query = $entityMap->createQuery();
         $query->doDeleteAll();
@@ -421,7 +417,7 @@ class SqlPersister implements PersisterInterface
     }
 
 
-    protected function doUpdates(EntityMap $entityMap, array $updates)
+    protected function doUpdates(EntityMap $entityMap, array $updates): void
     {
         $event = new UpdateEvent($this->getSession(), $entityMap, $updates);
         $this->getSession()->getConfiguration()->getEventDispatcher()->dispatch(Events::PRE_UPDATE, $event);
@@ -433,7 +429,7 @@ class SqlPersister implements PersisterInterface
 
         $updateCrossRelations = [];
 
-        foreach($updates as $entity) {
+        foreach ($updates as $entity) {
             //regenerate changeSet since PRE_UPDATE/PRE_SAVE could have changed entities
             $changeSet = $entityMap->buildChangeSet($entity);
             if ($changeSet) {
@@ -506,7 +502,9 @@ class SqlPersister implements PersisterInterface
                         sprintf(
                             'Could not update entity (%s)',
                             $readable
-                        ), 0, $e
+                        ),
+                        0,
+                        $e
                     );
                 }
             }
@@ -531,7 +529,7 @@ class SqlPersister implements PersisterInterface
      * @param array $params
      * @return string
      */
-    protected function getEntityPrimaryClause(EntityMap $entityMap, $entity, array &$params)
+    protected function getEntityPrimaryClause(EntityMap $entityMap, $entity, array &$params): string
     {
         $originValues = $entityMap->getLastKnownValues($entity);
 
@@ -556,7 +554,7 @@ class SqlPersister implements PersisterInterface
      *
      * @return bool
      */
-    protected function checkCrossRelationInsertions(EntityMap $entityMap, $inserts, RelationMap $relation)
+    protected function checkCrossRelationInsertions(EntityMap $entityMap, $inserts, RelationMap $relation): bool
     {
         $query = $relation->getMiddleEntity()->getRepository()->createQuery();
         $entityReader = $entityMap->getPropReader();
@@ -578,7 +576,6 @@ class SqlPersister implements PersisterInterface
                     }
                 }
             }
-
         }
 
         return false;

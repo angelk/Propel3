@@ -42,14 +42,14 @@ abstract class AbstractParser
      * @param string $rootKey The parser might use this name for converting from parser format
      * @return array Converted data
      */
-    abstract public function toArray($data, $rootKey = 'data');
+    abstract public function toArray($data, $rootKey = 'data'): array;
 
     public function listFromArray($data, $rootKey = 'data')
     {
         return $this->fromArray($data, $rootKey);
     }
 
-    public function listToArray($data, $rootKey = 'data')
+    public function listToArray($data, $rootKey = 'data'): array
     {
         return $this->toArray($data, $rootKey);
     }
@@ -61,7 +61,7 @@ abstract class AbstractParser
      *
      * @return string The file content processed by PHP
      */
-    public function load($path)
+    public function load($path): string
     {
         if (!file_exists($path)) {
             throw new FileNotFoundException(sprintf('File "%s" does not exist or is unreadable', $path));

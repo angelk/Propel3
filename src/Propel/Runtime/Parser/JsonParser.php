@@ -36,7 +36,7 @@ class JsonParser extends AbstractParser
      * @param string $rootKey
      * @return string Converted data, as a JSON string
      */
-    public function toJSON($array, $rootKey = null)
+    public function toJSON($array, $rootKey = null): string
     {
         return $this->fromArray($array, $rootKey);
     }
@@ -48,7 +48,7 @@ class JsonParser extends AbstractParser
      * @param string $rootKey
      * @return array  Converted data
      */
-    public function toArray($data, $rootKey = null)
+    public function toArray($data, $rootKey = null): array
     {
         $data = json_decode($data, true);
 
@@ -70,7 +70,7 @@ class JsonParser extends AbstractParser
      * @param string $rootKey
      * @return array  Converted data
      */
-    public function fromJSON($data, $rootKey = null)
+    public function fromJSON($data, $rootKey = null): array
     {
         return $this->toArray($data, $rootKey);
     }

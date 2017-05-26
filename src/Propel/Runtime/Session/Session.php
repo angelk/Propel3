@@ -349,7 +349,7 @@ class Session
     /**
      * @return boolean
      */
-    public function isClosed(): void
+    public function isClosed(): bool
     {
         return $this->closed;
     }
@@ -480,7 +480,7 @@ class Session
      *
      * @return object
      */
-    public function getInstanceFromFirstLevelCache($prefix, $hashCode): void
+    public function getInstanceFromFirstLevelCache($prefix, $hashCode)
     {
         if (isset($this->firstLevelCache[$prefix][$hashCode])) {
             $this->getConfiguration()->debug('retrieve firstLevelCache ' . $prefix . '/' . $hashCode);

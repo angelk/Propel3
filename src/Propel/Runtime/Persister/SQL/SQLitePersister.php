@@ -15,7 +15,7 @@ class SQLitePersister extends SqlPersister
     /**
      * @param ConnectionInterface $connection
      */
-    protected function prepareAutoIncrement(EntityMap $entityMap, ConnectionInterface $connection, $count)
+    protected function prepareAutoIncrement(EntityMap $entityMap, ConnectionInterface $connection, $count): void
     {
         $fieldNames = $entityMap->getAutoIncrementFieldNames();
         $object = [];
