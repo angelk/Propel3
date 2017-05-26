@@ -99,7 +99,7 @@ class Session
     /**
      * @return Configuration
      */
-    public function getConfiguration()
+    public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
@@ -123,7 +123,7 @@ class Session
      *
      * @return bool
      */
-    public function isRemoved($id)
+    public function isRemoved($id): bool
     {
         return isset($this->removed[$id]);
     }
@@ -133,7 +133,7 @@ class Session
      *
      * @return bool
      */
-    public function isNew($entity)
+    public function isNew($entity): bool
     {
         $id = spl_object_hash($entity);
         if ($entity instanceof \Propel\Runtime\EntityProxyInterface) {
@@ -158,7 +158,7 @@ class Session
      *
      * @return bool
      */
-    public function isChanged($entity)
+    public function isChanged($entity): bool
     {
         if ($this->hasKnownValues($entity)) {
             return !!$this->getConfiguration()->getEntityMapForEntity($entity)->buildChangeSet($entity);
@@ -172,7 +172,7 @@ class Session
      *
      * @return bool
      */
-    public function isPersisted($id)
+    public function isPersisted($id): bool
     {
         return isset($this->persisted[$id]);
     }
@@ -182,7 +182,7 @@ class Session
      *
      * @param object $entity
      */
-    public function setPersisted($entity)
+    public function setPersisted($entity): void
     {
         $id = spl_object_hash($entity);
         $this->getConfiguration()->debug('Set as persisted ' . get_class($entity) . '#' . NamingTool::shortEntityId($id), Configuration::LOG_PURPLE);
@@ -192,7 +192,7 @@ class Session
         $this->snapshot($entity);
     }
 
-    public function setRemoved($entity)
+    public function setRemoved($entity): void
     {
         $id = spl_object_hash($entity);
         $this->getConfiguration()->debug('Set as removed ' . get_class($entity) . '/#' . NamingTool::shortEntityId($id), Configuration::LOG_PURPLE);
@@ -203,7 +203,7 @@ class Session
     /**
      * @param string $id
      */
-    public function removePersisted($id)
+    public function removePersisted($id): void
     {
         unset($this->persisted[$id]);
     }
@@ -211,7 +211,7 @@ class Session
     /**
      * @return SessionRound
      */
-    public function getCurrentRound()
+    public function getCurrentRound(): SessionRound
     {
         if (-1 === $this->currentRound) {
             $this->enterNewRound();
@@ -223,7 +223,7 @@ class Session
     /**
      * @param $entity
      */
-    public function remove($entity)
+    public function remove($entity): void
     {
         if ($this->getCurrentRound()->isInCommit()) {
             $this->enterNewRound();
@@ -237,7 +237,7 @@ class Session
     /**
      * @return SessionRound
      */
-    public function enterNewRound()
+    public function enterNewRound(): SessionRound
     {
         $this->currentRound++;
 
@@ -248,7 +248,7 @@ class Session
      * @param object $entity
      * @param boolean $deep Whether all attached entities(relations) should be persisted too.
      */
-    public function persist($entity, $deep = false)
+    public function persist($entity, $deep = false): void
     {
         if (null === $entity) {
             return;
@@ -284,7 +284,7 @@ class Session
         $this->getCurrentRound()->persist($entity, $deep);
     }
 
-    public function addInvolvedPersister($persister)
+    public function addInvolvedPersister($persister): void
     {
         $this->involvedPersister->attach($persister);
     }
@@ -292,7 +292,7 @@ class Session
     /**
      * @throws \Exception
      */
-    public function commit()
+    public function commit(): void
     {
         if (!$this->rounds) {
             return;
@@ -349,12 +349,12 @@ class Session
     /**
      * @return boolean
      */
-    public function isClosed()
+    public function isClosed(): void
     {
         return $this->closed;
     }
 
-    public function repaired()
+    public function repaired(): void
     {
         $this->closed = false;
     }
@@ -362,7 +362,7 @@ class Session
     /**
      * Opens the session again and resets all rounds.
      */
-    public function reset()
+    public function reset(): void
     {
         $this->closed = false;
         $this->currentRound = -1;
@@ -378,7 +378,7 @@ class Session
      *
      * @return array
      */
-    public function snapshot($entity)
+    public function snapshot($entity): array
     {
         $values = $this->getConfiguration()->getEntityMapForEntity($entity)->getSnapshot($entity);
 
@@ -405,10 +405,9 @@ class Session
      *
      * @return array
      */
-    public function getLastKnownValues($id, $orCurrent = false)
+    public function getLastKnownValues($id, $orCurrent = false): array
     {
         if (is_object($id)) {
-
             if ($orCurrent && !$this->hasKnownValues($id)) {
                 return $this->getConfiguration()->getEntityMapForEntity($id)->getSnapshot($id);
             }
@@ -430,7 +429,7 @@ class Session
      *
      * @return bool
      */
-    public function hasKnownValues($id)
+    public function hasKnownValues($id): bool
     {
         if (is_object($id)) {
             $id = spl_object_hash($id);
@@ -449,7 +448,7 @@ class Session
      * @param object|string $id
      * @param array         $values
      */
-    public function setLastKnownValues($id, $values)
+    public function setLastKnownValues($id, $values): void
     {
         if (is_object($id)) {
             $id = spl_object_hash($id);
@@ -467,7 +466,7 @@ class Session
      * @param string $key
      * @param mixed $value
      */
-    public function setLastKnownValue($id, $key, $value)
+    public function setLastKnownValue($id, $key, $value): void
     {
         if (is_object($id)) {
             $id = spl_object_hash($id);
@@ -481,7 +480,7 @@ class Session
      *
      * @return object
      */
-    public function getInstanceFromFirstLevelCache($prefix, $hashCode)
+    public function getInstanceFromFirstLevelCache($prefix, $hashCode): void
     {
         if (isset($this->firstLevelCache[$prefix][$hashCode])) {
             $this->getConfiguration()->debug('retrieve firstLevelCache ' . $prefix . '/' . $hashCode);
@@ -495,7 +494,7 @@ class Session
     /**
      * @param object $entity
      */
-    public function addToFirstLevelCache($entity)
+    public function addToFirstLevelCache($entity): void
     {
         $entityMap = $this->getConfiguration()->getEntityMapForEntity($entity);
         $prefix = $entityMap->getFullClassName();
@@ -528,7 +527,7 @@ class Session
      *
      * @param null $prefix
      */
-    public function clearFirstLevelCache($prefix = null)
+    public function clearFirstLevelCache($prefix = null): void
     {
         if ($prefix) {
             unset($this->firstLevelCache[$prefix]);
@@ -536,4 +535,4 @@ class Session
             $this->firstLevelCache = [];
         }
     }
-} 
+}

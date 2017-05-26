@@ -66,7 +66,7 @@ class SessionRound
     /**
      * @return Session
      */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
@@ -74,7 +74,7 @@ class SessionRound
     /**
      * @return Configuration
      */
-    public function getConfiguration()
+    public function getConfiguration(): Configuration
     {
         return $this->session->getConfiguration();
     }
@@ -82,7 +82,7 @@ class SessionRound
     /**
      * @return boolean
      */
-    public function isCommitted()
+    public function isCommitted(): bool
     {
         return $this->committed;
     }
@@ -91,7 +91,7 @@ class SessionRound
      * @param object $entity
      * @param boolean $deep Whether all attached entities(relations) should be persisted too.
      */
-    public function persist($entity, $deep = false)
+    public function persist($entity, $deep = false): void
     {
         if ($this->isInCommit()) {
             throw new \RuntimeException('Can not persist entity when SessionRound is committing.');
@@ -100,7 +100,6 @@ class SessionRound
         $id = spl_object_hash($entity);
 
         if (!isset($this->persistQueue[$id])) {
-
             if ($this->getConfiguration()->isDebug()) {
                 $currentPk = json_encode($this->getConfiguration()->getEntityMapForEntity($entity)->getPK($entity));
                 $this->getConfiguration()->debug('success persist(' . get_class($entity) . "/$currentPk, " . var_export($deep, true) . ')');
@@ -143,7 +142,7 @@ class SessionRound
     /**
      * @param $entity
      */
-    public function remove($entity)
+    public function remove($entity): void
     {
         if ($this->isInCommit()) {
             throw new \RuntimeException('Can not remove entity when SessionRound is committing.');
@@ -170,7 +169,7 @@ class SessionRound
     /**
      *
      */
-    public function commit()
+    public function commit(): void
     {
         if (!$this->removeQueue && !$this->persistQueue) {
             return;
@@ -203,7 +202,7 @@ class SessionRound
      *
      * @return bool
      */
-    public function isInCommit()
+    public function isInCommit(): bool
     {
         return $this->inCommit;
     }
@@ -211,7 +210,7 @@ class SessionRound
     /**
      * Proxies all queued entities to be deleted to its persister class.
      */
-    protected function doDelete()
+    protected function doDelete(): void
     {
         $removeGroups = [];
         /** @var PersisterInterface[] $persisterMap */
@@ -244,7 +243,7 @@ class SessionRound
     /**
      * Proxies all queued entities to be saved to its persister class.
      */
-    protected function doPersist()
+    protected function doPersist(): void
     {
         $dependencyGraph = new DependencyGraph($this->getSession());
         foreach ($this->persistQueue as $entity) {
@@ -272,14 +271,18 @@ class SessionRound
                     }
                 }
 
-                $this->getConfiguration()->debug(sprintf('Group #%d: %d [%d insert, %d update] items for %s using %s',
-                    $idx+1,
-                    count($entityIds),
-                    $newItems,
-                    count($entityIds) - $newItems,
-                    $this->getConfiguration()->getEntityMapForEntity($firstEntity)->getFullClassName(),
-                    get_class($persister)),
-                    Configuration::LOG_CYAN);
+                $this->getConfiguration()->debug(
+                    sprintf(
+                        'Group #%d: %d [%d insert, %d update] items for %s using %s',
+                        $idx+1,
+                        count($entityIds),
+                        $newItems,
+                        count($entityIds) - $newItems,
+                        $this->getConfiguration()->getEntityMapForEntity($firstEntity)->getFullClassName(),
+                        get_class($persister)
+                    ),
+                    Configuration::LOG_CYAN
+                );
             }
             $this->getConfiguration()->debug("");
             $this->getConfiguration()->debug("");
@@ -315,7 +318,6 @@ class SessionRound
             $this->getConfiguration()->debug(" ######################  SessionRound[{$this->getIdx()}]::doPersist() END ###################### ", Configuration::LOG_CYAN);
             $this->getConfiguration()->debug("", Configuration::LOG_CYAN);
             $this->getConfiguration()->debug("", Configuration::LOG_CYAN);
-
         }
 
         $this->persistQueue = [];

@@ -815,8 +815,6 @@ class Configuration extends GeneratorConfig
     }
 
     /**
-     * @TODO add return type
-     *
      * Logs a message
      * If a logger has been configured, the logger will be used, otherwise the
      * logging message will be discarded without any further action

@@ -11,8 +11,8 @@
 namespace Propel\Runtime\Util;
 
 /**
-* Profiler for Propel
-*/
+ * Profiler for Propel
+ */
 class Profiler
 {
     protected $slowTreshold;
@@ -48,7 +48,7 @@ class Profiler
      *
      * @param integer $slowTreshold duration in seconds
      */
-    public function setSlowTreshold($slowTreshold)
+    public function setSlowTreshold($slowTreshold): int
     {
         $this->slowTreshold = $slowTreshold;
     }
@@ -58,7 +58,7 @@ class Profiler
      *
      * @param array $details
      */
-    public function setDetails($details)
+    public function setDetails($details): void
     {
         $this->details = $details;
     }
@@ -68,7 +68,7 @@ class Profiler
      *
      * @param string $innerGlue
      */
-    public function setInnerGlue($innerGlue)
+    public function setInnerGlue($innerGlue): void
     {
         $this->innerGlue = $innerGlue;
     }
@@ -78,7 +78,7 @@ class Profiler
      *
      * @param string $outerGlue
      */
-    public function setOuterGlue($outerGlue)
+    public function setOuterGlue($outerGlue): void
     {
         $this->outerGlue = $outerGlue;
     }
@@ -109,7 +109,7 @@ class Profiler
      *
      * @param array $profilerConfiguration
      */
-    public function setConfiguration($profilerConfiguration)
+    public function setConfiguration($profilerConfiguration): void
     {
         if (isset($profilerConfiguration['slowTreshold'])) {
             $this->setSlowTreshold($profilerConfiguration['slowTreshold']);
@@ -132,7 +132,7 @@ class Profiler
      *
      * @return array
      */
-    public function getConfiguration()
+    public function getConfiguration(): array
     {
         return array(
             'slowTreshold' => $this->slowTreshold,
@@ -142,17 +142,17 @@ class Profiler
         );
     }
 
-    public function start()
+    public function start(): void
     {
         $this->snapshot = self::getSnapshot();
     }
 
-    public function isSlow()
+    public function isSlow(): bool
     {
         return microtime(true) - $this->snapshot['microtime'] > $this->slowTreshold;
     }
 
-    public function getProfile()
+    public function getProfile(): string
     {
         return $this->getProfileBetween($this->snapshot, self::getSnapshot());
     }
@@ -171,7 +171,7 @@ class Profiler
      *
      * @return string
      */
-    public function getProfileBetween($startSnapshot, $endSnapshot)
+    public function getProfileBetween($startSnapshot, $endSnapshot): string
     {
         $profile = '';
 
@@ -204,7 +204,6 @@ class Profiler
                     break;
             }
             $profile .= $config['name'] . $this->innerGlue . str_pad($value, $config['pad'], ' ', STR_PAD_LEFT) . $this->outerGlue;
-
         }
 
         return $profile;
@@ -215,7 +214,7 @@ class Profiler
      *
      * @return array
      */
-    public static function getSnapshot()
+    public static function getSnapshot(): array
     {
         return array(
             'microtime'       => microtime(true),
@@ -232,7 +231,7 @@ class Profiler
      *
      * @return string
      */
-    public static function formatMemory($bytes, $precision = 3)
+    public static function formatMemory($bytes, $precision = 3): float
     {
         $absBytes = abs($bytes);
         $sign = ($bytes == $absBytes) ? 1 : -1;
@@ -254,7 +253,7 @@ class Profiler
      *
      * @return string
      */
-    public static function formatDuration($duration, $precision = 3)
+    public static function formatDuration($duration, $precision = 3): string
     {
         if ($duration < 1) {
             $duration *= 1000;
@@ -275,16 +274,16 @@ class Profiler
      *
      * @return float
      */
-    public static function toPrecision($number, $significantFigures = 3)
+    public static function toPrecision($number, $significantFigures = 3): float
     {
         if (0 === $number) {
-            return 0;
+            return 0.0;
         }
 
         $significantDecimals = floor($significantFigures - log10(abs($number)));
         $magnitude = pow(10, $significantDecimals);
         $shifted = round($number * $magnitude);
 
-        return number_format($shifted / $magnitude, $significantDecimals);
+        return (float)number_format($shifted / $magnitude, $significantDecimals);
     }
 }

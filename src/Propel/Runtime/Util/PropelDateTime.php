@@ -11,6 +11,7 @@ namespace Propel\Runtime\Util;
 
 use \DateTimeZone;
 use Propel\Runtime\Exception\PropelException;
+use DateTime;
 
 /**
  * DateTime subclass which supports serialization.
@@ -19,7 +20,7 @@ use Propel\Runtime\Exception\PropelException;
  * @author Soenke Ruempler
  * @author Hans Lellelid
  */
-class PropelDateTime extends \DateTime
+class PropelDateTime extends DateTime
 {
     /**
      * A string representation of the date, for serialization.
@@ -34,7 +35,7 @@ class PropelDateTime extends \DateTime
      */
     private $tzString;
 
-    protected static function isTimestamp($value)
+    protected static function isTimestamp($value): bool
     {
         if (!is_numeric($value)) {
             return false;
@@ -60,11 +61,11 @@ class PropelDateTime extends \DateTime
      *
      * @param bool $time optional in seconds. floating point allowed.
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public static function createHighPrecision($time = null)
+    public static function createHighPrecision($time = null): DateTime
     {
-        $dateTime = \DateTime::createFromFormat('U.u', $time ?: self::getMicrotime());
+        $dateTime = DateTime::createFromFormat('U.u', $time ?: self::getMicrotime());
 
         $dateTime->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
@@ -77,7 +78,7 @@ class PropelDateTime extends \DateTime
      *
      * @return string
      */
-    public static function getMicrotime()
+    public static function getMicrotime(): string
     {
         $mtime = microtime(true);
 
@@ -144,7 +145,7 @@ class PropelDateTime extends \DateTime
      *
      * @return string[]
      */
-    public function __sleep()
+    public function __sleep(): array
     {
         // We need to use a string without a time zone, due to
         // PHP bug: http://bugs.php.net/bug.php?id=40743

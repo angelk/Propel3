@@ -111,7 +111,7 @@ class PropelConditionalProxy
      *
      * @return boolean
      */
-    protected function getConditionalState()
+    protected function getConditionalState(): bool
     {
         return $this->state && $this->parentState;
     }

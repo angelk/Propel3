@@ -28,7 +28,6 @@ trait ActiveRecordTrait
     }
 
     /**
-     * @TODO add return type
      *
      * @return mixed
      */
@@ -38,7 +37,6 @@ trait ActiveRecordTrait
     }
 
     /**
-     * @TODO add return type
      *
      * @return mixed
      */
@@ -48,8 +46,6 @@ trait ActiveRecordTrait
     }
 
     /**
-     * @TODO add return type
-     *
      * @return mixed
      */
     public function delete()
@@ -57,9 +53,6 @@ trait ActiveRecordTrait
         Configuration::getCurrentConfiguration()->getRepositoryForEntity($this)->remove($this);
     }
 
-    /**
-     * @TODO add return type
-     */
     public function getPrimaryKey()
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getPrimaryKey($this);
@@ -82,7 +75,7 @@ trait ActiveRecordTrait
      * EntityMap::TYPE_COLNAME, EntityMap::TYPE_FIELDNAME, EntityMap::TYPE_NUM.
      * Defaults to EntityMap::TYPE_FIELDNAME.
      */
-    public function fromArray(array $arr, $keyType = EntityMap::TYPE_FIELDNAME): object
+    public function fromArray(array $arr, $keyType = EntityMap::TYPE_FIELDNAME)
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->fromArray($arr, $keyType, $this);
     }
@@ -97,7 +90,7 @@ trait ActiveRecordTrait
      * Defaults to EntityMap::TYPE_FIELDNAME.
      * @return $this
      */
-    public function getByName($name, $type = EntityMap::TYPE_FIELDNAME): object
+    public function getByName($name, $type = EntityMap::TYPE_FIELDNAME)
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getByName($this, $name, $type);
     }
@@ -108,7 +101,7 @@ trait ActiveRecordTrait
      * @param integer $pos position in xml schema
      * @return $this
      */
-    public function getByPosition($pos): object
+    public function getByPosition($pos)
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->getByPosition($this, $pos);
     }
@@ -125,7 +118,7 @@ trait ActiveRecordTrait
      * Defaults to EntityMap::TYPE_FIELDNAME.
      * @return $this
      */
-    public function setByName($name, $value, $type = EntityMap::TYPE_FIELDNAME): object
+    public function setByName($name, $value, $type = EntityMap::TYPE_FIELDNAME)
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->setByName($this, $name, $value, $type);
     }
@@ -137,7 +130,7 @@ trait ActiveRecordTrait
      * @param mixed $value field value
      * @return $this
      */
-    public function setByPosition($pos, $value): object
+    public function setByPosition($pos, $value)
     {
         return Configuration::getCurrentConfiguration()->getEntityMapForEntity($this)->setByPosition($this, $pos, $value);
     }
@@ -183,8 +176,6 @@ trait ActiveRecordTrait
     }
 
     /**
-     * // @TODO add return type
-     *
      * @param string $name
      *
      * @return mixed
@@ -204,7 +195,7 @@ trait ActiveRecordTrait
      *
      * @return $this
      */
-    public function setVirtualColumn($name, $value): object
+    public function setVirtualColumn($name, $value)
     {
         $this->$name = $value;
 

@@ -62,7 +62,7 @@ abstract class Repository
     /**
      * Maps all event dispatcher events to local event dispatcher, if we have a child class (custom repository class).
      */
-    protected function mapEvents()
+    protected function mapEvents(): void
     {
         $self = $this;
         $mapEvents = [
@@ -92,12 +92,12 @@ abstract class Repository
     /**
      * @return mixed
      */
-    abstract function createObject();
+    abstract public function createObject();
 
     /**
      * @return EntityMap
      */
-    public function getEntityMap()
+    public function getEntityMap(): EntityMap
     {
         return $this->entityMap;
     }
@@ -105,7 +105,7 @@ abstract class Repository
     /**
      * @param EntityMap $entityMap
      */
-    public function setEntityMap($entityMap)
+    public function setEntityMap($entityMap): void
     {
         $this->entityMap = $entityMap;
     }
@@ -113,7 +113,7 @@ abstract class Repository
     /**
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher()
+    public function getEventDispatcher(): EventDispatcherInterface
     {
         if (null === $this->eventDispatcher) {
             $this->eventDispatcher = new EventDispatcher();
@@ -125,7 +125,7 @@ abstract class Repository
     /**
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function setEventDispatcher($eventDispatcher)
+    public function setEventDispatcher($eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -134,7 +134,7 @@ abstract class Repository
      * @param string   $eventName
      * @param callable $listener
      */
-    public function on($eventName, callable $listener)
+    public function on($eventName, callable $listener): void
     {
         $this->getEventDispatcher()->addListener($eventName, $listener);
     }
@@ -142,7 +142,7 @@ abstract class Repository
     /**
      * Deletes all objects from the backend and clears the first level cache.
      */
-    public function deleteAll()
+    public function deleteAll(): void
     {
         $this->doDeleteAll();
     }
@@ -157,7 +157,7 @@ abstract class Repository
      * @param object $entity
      * @param bool   $deep
      */
-    public function persist($entity, $deep = false)
+    public function persist($entity, $deep = false): void
     {
         $this->getConfiguration()->getSession()->persist($entity, $deep);
     }
@@ -165,7 +165,7 @@ abstract class Repository
     /**
      * @return Configuration
      */
-    public function getConfiguration()
+    public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
@@ -173,7 +173,7 @@ abstract class Repository
     /**
      * @return Session
      */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->getConfiguration()->getSession();
     }
@@ -181,7 +181,7 @@ abstract class Repository
     /**
      * @param Configuration $configuration
      */
-    public function setConfiguration($configuration)
+    public function setConfiguration($configuration): void
     {
         $this->configuration = $configuration;
     }
